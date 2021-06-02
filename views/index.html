@@ -18,42 +18,23 @@
   </head>
 
   <body>
-    <h1>Continous glitch</h1>
-    <p>
-      First iteration of <b>Become Rotten </b>: project that aims to provide
-      digital data a medium to become rotten, or just a continuous glitch.
-      Through computing feedback systems inspired by nature and life cycles.
-    </p> 
-    <p>
-      <b>It creates a collaborative space to explore multi-feedback systems.
-         Where you can experience how your information travels in a distributed system, and how it feels sharing the process of creating ^_^</b>
-    </p>
+    <h1 class="mega shadow" >CONTINOUS GLITCH: </h1>
+    <h2 class="shadow">Understanding RTP protocol by glitching an image collaboratively</h2>
+   
+    <h3>This is a space to explore and  experience how your information travels in a distributed system.</h3>
+
+    <h1>CREATING LIVING MEDIUM</h1>
+    <h2>[0] Set up</h2>
     <dl>
-      <dt>It has 2 composable stages:</dt>
-      <dd>
-        - <i> Single user interaction:</i> altering control values of diffusion algorithm over image. This creates an
-        inner feedback loop with their scene. <br>
-        <a href="https://visualizer.solquemal.com/03-diffusion/"> Know more about diffusion system</a>
-      </dd>
-      <dd>
-        - <i> Network interaction:</i> Use <b>peer to peer connections</b> to have general context in where users’ actions will be affecting each other. Context will be the outer feedback loop.
-      </dd>
+      <dd>- Upload image</dd>
+      <dd>- Share URL with your peers.</dd>
     </dl>
-    <p>
-      <b>Still a WORK-IN-PROGRESS.</b>
-      Some future algorithms for interacting, creating lifeforms can be
-      <a href="https://gallery.solquemal.com/become-rotten">seen here</a> and
-      <a href="https://visualizer.solquemal.com/04-gray-scott/"
-        >explore here
-      </a>
-    </p>
-    <h2>CREATING LIVING MEDIUM</h2>
-    <h2>Single user interaction</h2>
+    <h1>INSIDE THE MEDIUM</h1>
+    <dt>We will be part of a multi-feedback system, where we can identify  2 composable stages: </dt>
+    <h2>[1] Single user interaction</h2>
+    <p> You will be altering values of diffusion algorithm over an image with the <b> controls </b> <a class="extra" href="https://visualizer.solquemal.com/03-diffusion/"> Know more about diffusion system</a></p><p> This creates an  inner feedback loop with your scene(the image you are seeing on your screen). </p>
     <dl>
-      <dt><b>Set up</b></dt>
-      <dd>- upload image</dd>
-      <dd>- share URL with your peers.</dd>
-      <dt><b>Controls</b></dt>
+      <dt><b>Controls' Specification</b></dt>
        <p>
         Play around with sliders. 
       </p>
@@ -79,9 +60,9 @@
         - Choosing <b>what</b> values of the controls <b>you are receiving</b> : filters are not implemented yet.
       </dd>
     </dl>
-    <p>If you wanna try changing them remix this project, add cases in this <a href="https://glitch.com/edit/#!/continous-glitch?path=js%2Frtc.js%3A51%3A11">file on Line 50 </a> and this one
-    <a href="https://glitch.com/edit/#!/continous-glitch?path=js%2Fcont.js%3A1%3A0">file on Line 153 </a></p>
-    <h2>Network interaction</h2>
+
+    <h2>[2] Network interaction</h2>
+    <p>Use <b>peer to peer connections</b> to have general context in where users’ actions will be affecting each other mediums. This context can be seenas  the outer feedback loop.</p>
     <p>
       For now, once you get the URL you are automatically connected to receive
       and send messages.<br />
@@ -120,6 +101,7 @@
             }
           });
       });
+
       //Calling connect from rtc.js
       if (!connected) {
         console.log("Connecting to socket...");
@@ -133,10 +115,9 @@
       <input type="file" name="photo" id="upload-photo" />
     </div>
     <footer>
-      If you have some collaboratorive space to create; comment to share; or
-      problems using it.<br />
-      Drop me at contact [at] solquemal.com <br />
-      <a href="https://solquemal.com/">who is solquemal!?</a>
+      Workshop designed for
+      <a href="https://hacklab01.org/hackn3t">hacn3t</a> </br>
+      facilitatd by <a href="https://solquemal.com/">sol sarratea</a>
     </footer>
   </body>
 </html>

@@ -3,15 +3,15 @@ let socket;
 
 function connect() {
 	// Connect to signalling server:
-  console.log('connected to signalling server at https://continous-glitch.glitch.me/');
-
-  socket = io.connect('https://continous-glitch.glitch.me/');
+    console.log(window.location.href);
+    socket = io.connect(window.location.href);
 
 	let id = Math.floor(Math.random()*100000);
    
 	// Start WebRTC handshake. (with social distance)
 	let pcs = new Map();
-	
+	window.pcs = pcs;
+
 	socket.on('hello', async data => {
 		console.log("got hello", data)
 		let pc = createPeerConnection(socket,pcs,data, id);
@@ -39,7 +39,7 @@ function connect() {
 	socket.on('candidate', data => {
 		if (data.to == id){
 			let pc = pcs.get(data.from);
-			console.log("got candidate")
+			console.log("got candidate", data.candidate)
 			pc.addIceCandidate(new RTCIceCandidate(data.candidate));
 		}
 	})
@@ -102,5 +102,3 @@ function createPeerConnection(socket,pcs,data,id){
 	pcs.set(data.from, pc);
 	return pc;
 }
-
-connect();
