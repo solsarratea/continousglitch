@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      type="text/javascript"
+      src="https://cdn.socket.io/socket.io-1.4.5.js"
+    ></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/rtc.js"></script>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
+    <link href="/index.css" rel="stylesheet" />
+    <title>Continous glitch</title>
+  </head>
+
+  <body>
+    <h1>Continous glitch</h1>
+    <p>
+      First iteration of <b>Become Rotten </b>: project that aims to provide
+      digital data a medium to become rotten, or just a continuous glitch.
+      Through computing feedback systems inspired by nature and life cycles.
+    </p> 
+    <p>
+      <b>It creates a collaborative space to explore multi-feedback systems.
+         Where you can experience how your information travels in a distributed system, and how it feels sharing the process of creating ^_^</b>
+    </p>
+    <dl>
+      <dt>It has 2 composable stages:</dt>
+      <dd>
+        - <i> Single user interaction:</i> altering control values of diffusion algorithm over image. This creates an
+        inner feedback loop with their scene. <br>
+        <a href="https://visualizer.solquemal.com/03-diffusion/"> Know more about diffusion system</a>
+      </dd>
+      <dd>
+        - <i> Network interaction:</i> Use <b>peer to peer connections</b> to have general context in where users’ actions will be affecting each other. Context will be the outer feedback loop.
+      </dd>
+    </dl>
+    <p>
+      <b>Still a WORK-IN-PROGRESS.</b>
+      Some future algorithms for interacting, creating lifeforms can be
+      <a href="https://gallery.solquemal.com/become-rotten">seen here</a> and
+      <a href="https://visualizer.solquemal.com/04-gray-scott/"
+        >explore here
+      </a>
+    </p>
+    <h2>CREATING LIVING MEDIUM</h2>
+    <h2>Single user interaction</h2>
+    <dl>
+      <dt><b>Set up</b></dt>
+      <dd>- upload image</dd>
+      <dd>- share URL with your peers.</dd>
+      <dt><b>Controls</b></dt>
+       <p>
+        Play around with sliders. 
+      </p>
+      <dd>- frecuencyBroadcast: number of frames you will be sending messages</dd>
+      <dd>- step: size of neighbourhood radius of diffusion</dd>
+      <dd>- iterations: how many times the algorithm is apply per frame </dd>
+      <dd>- sharp: amount to sharpen colour</dd>
+      <dd>- weigth: how important is the value of each current pixel</dd>
+      <dd>- diffusionRate1: rate of diffusion of neighbours in directions: north, south, east, west </dd>
+      <dd>- diffusionRate2: rate of diffusion of neighbours in directions: north-east, north-west, south-east, south-west</dd>
+      <dd>- interpolate: value that mixes with previous frame</dd>
+       <p>
+         When you move sliders, you are updating values that will create messages. Some messages will be listened by all your peers, affecting the shared glitchy medium. As well as you will be receiving messages that will altered the control's values.
+      </p>
+       <dt><b> Decide how to interact </b></dt>
+      <dd>
+        - Choosing <b>when</b> to broadcast your messages in terms of frames. Using frecuencyBroadcast.
+      </dd>
+      <dd class="wip">
+        - Choosing <b>what</b> values of the controls <b>you are sending </b> : default sharing values are diffusionRate1, sharp, interpolate. 
+      </dd>
+      <dd class="wip">
+        - Choosing <b>what</b> values of the controls <b>you are receiving</b> : filters are not implemented yet.
+      </dd>
+    </dl>
+    <p>If you wanna try changing them remix this project, add cases in this <a href="https://glitch.com/edit/#!/continous-glitch?path=js%2Frtc.js%3A51%3A11">file on Line 50 </a> and this one
+    <a href="https://glitch.com/edit/#!/continous-glitch?path=js%2Fcont.js%3A1%3A0">file on Line 153 </a></p>
+    <h2>Network interaction</h2>
+    <p>
+      For now, once you get the URL you are automatically connected to receive
+      and send messages.<br />
+    </p>
+    <a href="/rtp"> Learn more! </a>
+    <script>
+      var connected = false;
+      var img = new Image();
+      window.addEventListener("load", function() {
+        document
+          .querySelector('input[type="file"]')
+          .addEventListener("change", function() {
+            if (this.files && this.files[0]) {
+              const file = this.files[0];
+              let formData = new FormData();
+              formData.append("image", file);
+
+              const params = {
+                method: "POST",
+                body: formData
+              };
+
+              fetch("/saveImage", params)
+                .then(response => response.json())
+                .then(data => {
+                  img.src = data.path;
+                  img.crossOrigin = "anonymous";
+                  console.log("saving !!! path", data.path);
+
+                  window.location.href = `medium?${data.path}`;
+                  
+                })
+                .catch(error => {
+                  console.error(error);
+                });
+            }
+          });
+      });
+      //Calling connect from rtc.js
+      if (!connected) {
+        console.log("Connecting to socket...");
+        connect();
+        connected = true;
+      }
+    </script>
+    <h2>Get started by uploading an image!</h2>
+    <div id="myBtnContainer">
+      <label class="btn" for="upload-photo">Choose file</label>
+      <input type="file" name="photo" id="upload-photo" />
+    </div>
+    <footer>
+      If you have some collaboratorive space to create; comment to share; or
+      problems using it.<br />
+      Drop me at contact [at] solquemal.com <br />
+      <a href="https://solquemal.com/">who is solquemal!?</a>
+    </footer>
+  </body>
+</html>

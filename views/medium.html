@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Continous Glitch</title>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
+    <title>Continous Glitch</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://threejs.org/examples/js/controls/DragControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+    <script src="threex.domevents.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/rtc.js"></script>
+    <meta name="description" content="continous glitch" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+    <link href="/styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="top-bar">
+<!--       <a id="btn" class="info">
+        <span class="fab fas fa-info-circle info"></span>
+      </a>
+      <div id="showInfo" class="modal">
+        <div class="modal-header">
+          <p>CONTINOUS GLITCH</p>
+          <span class="close">&times; </span>
+        </div>
+        <div class="modal-content">
+          <h4>
+            Living medium to rotten digital data through diffusion process.
+          </h4>
+        </div>
+      </div> -->
+      <a
+        href="https://glitch.com/edit/#!/continous-glitch?path=README.md%3A1%3A0"
+        class="info"
+        title="View source"
+      >
+        <img style="width:2.5em; margin-top: em;" src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" alt="Glitch">
+        <span class="text">View source</span>
+      </a>
+    </div>
+    <script id="vertexShader" type="x-shader/x-vertex">
+      varying vec2 texCoordVarying;
+
+      void main() {
+          texCoordVarying = uv;
+          gl_Position =   projectionMatrix *
+                          modelViewMatrix *
+                          vec4(position,1.0);
+      }
+    </script>
+    <script id="finalShader" type="x-shader/x-vertex">
+      varying vec2 texCoordVarying;
+      uniform sampler2D channel0;
+
+      void main() {
+        vec4 inText = texture2D(channel0,texCoordVarying);
+        gl_FragColor = inText;
+
+      }
+    </script>
+    <script id="fragmentShader" type="x-shader/x-vertex">
+      uniform sampler2D channel0;
+      uniform sampler2D channel1;
+      varying vec2 texCoordVarying;
+      uniform float time;
+     
+      uniform float step;
+      uniform float interpolate;
+   
+      uniform float sharp;
+      uniform float weight;
+      
+      uniform vec2 resolution;
+      uniform float diff1;
+      uniform float diff2;
+
+      vec4 zero2one(vec4 v){
+
+        vec4 res = vec4(
+          fract(abs(v.x)),
+          fract(abs(v.y)),
+          fract(abs(v.z)),
+          1.);
+
+          return res;
+      }
+
+
+      void main()
+      {
+          vec2 pixel = gl_FragCoord.xy/resolution;
+
+          vec4 color_sharpen=vec4(0.);
+          vec4 inText = texture2D(channel0,pixel);
+          vec4 center = texture2D(channel1,pixel);
+
+
+          float xPixel= 1./resolution.x * step;
+          float yPixel= 1./resolution.x * step;
+
+
+          vec4 E = texture2D(channel1, vec2(pixel.x+xPixel,pixel.y));
+          vec4 W = texture2D(channel1, vec2(pixel.x-xPixel,pixel.y));
+          vec4 N = texture2D(channel1, vec2(pixel.x,pixel.y+yPixel));
+          vec4 S = texture2D(channel1, vec2(pixel.x,pixel.y-yPixel));
+
+          vec4 NE = texture2D(channel1, vec2(pixel.x+xPixel,pixel.y + yPixel));
+          vec4 NW = texture2D(channel1, vec2(pixel.x-xPixel,pixel.y + yPixel));
+          vec4 SE = texture2D(channel1, vec2(pixel.x+xPixel,pixel.y+yPixel));
+          vec4 SW = texture2D(channel1, vec2(pixel.x+xPixel,pixel.y-yPixel));
+
+
+          vec3 factor = vec3(0.);
+          factor += center.rgb * weight;
+          factor += N.rgb * diff1;
+          factor += S.rgb * diff1;
+          factor += E.rgb * diff1;
+          factor += W.rgb * diff1;
+          factor += NE.rgb * diff2;
+          factor += NW.rgb * diff2;
+          factor += SE.rgb * diff2;
+          factor += SW.rgb * diff2;
+
+          vec4 newColor = vec4(factor, 1.);
+
+          color_sharpen= newColor/9.;
+
+          float a = color_sharpen.r;
+
+          color_sharpen=vec4(inText * 4.* (a * a - color_sharpen.b)+ sharp*color_sharpen);
+
+          color_sharpen=fract(color_sharpen);
+
+          gl_FragColor = mix(inText,color_sharpen, interpolate);
+        }
+    </script>
+    <script src="index-controls.js"></script>
+    <script src="cont.js"></script>
+  </body>
+</html>

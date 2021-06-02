@@ -1,0 +1,107 @@
+body {
+  font-family: "Courier New", Courier, monospace;
+  background-color: rgb(244,144,244,0.5);
+  margin: 2em;
+  padding: 2em;
+  font-size: 14px;
+}
+
+.btn,
+p.itemPara,
+p {
+  padding: 12px 16px;
+  margin: 2px;
+}
+
+h1,
+p {
+  padding: 12px 3px;
+  margin: 2px;
+}
+
+a,
+p {
+  color: black;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+a.itemLink,
+p.itemPara {
+  float: left;
+  display: inline-block;
+  border-radius: 12px;
+  background-color: #f1f1f1;
+}
+
+.filterDiv,
+.show {
+  float: left;
+  width: 100%;
+}
+
+.filterDiv,
+.show,
+.btn {
+  margin: 2px 2px;
+}
+
+.filterDiv {
+  display: none;
+}
+
+.show {
+  display: inline-block;
+}
+
+#myBtnContainer {
+  margin: 2em;
+/*   padding-top: 1em; */
+}
+
+.container {
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+/* Style the buttons */
+.btn {
+  border-radius: 12px;
+  background-color: #f1f1f1;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #000;
+  color: white;
+}
+
+.btn.active {
+  background-color: #666;
+  color: white;
+}
+
+#upload-photo {
+   opacity: 0;
+   position: absolute;
+   z-index: -1;
+}
+
+footer {
+  margin: 1em;
+}
+
+dt {
+  font-size: 16px;
+}
+
+dt,dd {
+  margin-bottom: .5em;
+}
+
+.wip {
+  color: blue;
+}
