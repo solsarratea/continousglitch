@@ -2,9 +2,10 @@ let datachannels = [];
 let socket;
 
 function connect() {
+    console.log("connecting")
 	// Connect to signalling server:
-    console.log(window.location.href);
-    socket = io.connect(window.location.href);
+    console.log("https://continous-glitch.herokuapp.com/");
+    socket = io.connect("https://continous-glitch.herokuapp.com/");
 
 	let id = Math.floor(Math.random()*100000);
    
@@ -49,16 +50,34 @@ function connect() {
 
 function onmsg(e) {
 	let msg = JSON.parse(e.data);
+
     switch (msg.kind){
-      case 'interpolate': 
+    case 'interpolate':
         window.guiData.interpolate = msg.value;
         break;
-      case 'diffusionRate': 
+    case 'diffusionRate1':
         window.guiData.diffusionRate1 = msg.value;
         break;
-      case 'sharp': 
+    case 'diffusionRate2':
+        window.guiData.diffusionRate2 = msg.value;
+        break;
+    case 'invert':
+        window.guiData.invert = msg.value;
+        console.log(msg.value);
+        break;
+    case 'sharp':
         window.guiData.sharp = msg.value;
         break;
+    case 'hue':
+        window.guiData.hue = msg.value;
+        break;
+    case 'saturate':
+        window.guiData.saturate = msg.value;
+        break;
+    case 'weight':
+        window.guiData.weight = msg.value;
+        break;
+
       default:
         console.log(`Invalid msg ${msg.kind}`)
     }
@@ -102,3 +121,52 @@ function createPeerConnection(socket,pcs,data,id){
 	pcs.set(data.from, pc);
 	return pc;
 }
+
+function broadcastSingleMessage(kind, value){
+    //TODO: implement actor to be sender and to chose which parameters to broadcast
+    if(window.guiData.sender){
+       // console.log("Broadcasting: ", kind)
+        broadcast(JSON.stringify({
+		    kind: kind,
+		    value: value
+	    }));
+    }
+}
+function broadcastMessages(){
+//FIXME: hardcoded parameters to broadcast
+    broadcast(JSON.stringify({
+		kind: 'interpolate',
+		value: window.guiData.interpolate,
+	}));
+
+    broadcast(JSON.stringify({
+		kind: 'diffusionRate1',
+		value: window.guiData.diffusionRate1,
+	}));
+
+    // broadcast(JSON.stringify({
+	// 	kind: 'hue',
+	// 	value: window.guiData.hue,
+	// }));
+
+    // broadcast(JSON.stringify({
+	// 	kind: 'saturate',
+	// 	value: window.guiData.saturate,
+	// }));
+
+    broadcast(JSON.stringify({
+		kind: 'sharp',
+		value: window.guiData.sharp,
+	}));
+
+    broadcast(JSON.stringify({
+		kind: 'invert',
+		value: window.guiData.invert,
+	}));
+    // broadcast(JSON.stringify({
+	// 	kind: 'weight',
+	// 	value: window.guiData.weight,
+	// }));
+}
+
+connect();

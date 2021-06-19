@@ -57,9 +57,9 @@ io.sockets.on('connection',
       }
     );
 
-    socket.on('diffusionRate',
+    socket.on('diffusionRate1',
       function(data) {
-        socket.broadcast.emit('diffusionRate', data);
+        socket.broadcast.emit('diffusionRate1', data);
       }
     );
     
@@ -68,14 +68,25 @@ io.sockets.on('connection',
         socket.broadcast.emit('interpolate', data);
     }
     );
-  
-   socket.on('sharp',
-      function(data) {
-        socket.broadcast.emit('sharp', data);
-    }
-  );
 
-    
+      socket.on('sharp',
+                function(data) {
+                    socket.broadcast.emit('sharp', data);
+                }
+               );
+
+      socket.on('hue',
+                function(data) {
+                    socket.broadcast.emit('hue', data);
+                });
+
+      socket.on('invert',
+                function(data) {
+                    socket.broadcast.emit('invert', data);
+                }
+               );
+
+
   socket.on('disconnect', function() {
     console.log("Client has disconnected");
   });

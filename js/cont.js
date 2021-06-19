@@ -35,11 +35,19 @@ function  addGuiControls(){
       "diffusionRate1": 2.,
       "diffusionRate2": 3.5,
       "frequencyBroadcast": 5,
+      "invert":0,
+      "hue":0.,
+      "saturate":0.,
   };
     gui.add(guiData, 'frequencyBroadcast', 1, 100 ).step(1);
     gui.add(guiData, 'step', 0., 5.).step(.1);
     gui.add(guiData, 'iterations', 1, 10 ).step(1);
-    gui.add(guiData, 'interpolate', 0, 2.).step(0.001);
+
+    gui.add(guiData, 'invert', 0, 1.).step(0.001);
+    gui.add(guiData, 'saturate', 0, 1.).step(0.001);
+    gui.add(guiData, 'hue', -5., 5.).step(0.001);
+
+    gui.add(guiData, 'interpolate', 0, 1.).step(0.001);
     gui.add(guiData, 'sharp', 0, 1.).step(0.001);
     gui.add(guiData, 'weight', -20, 20.); 
     gui.add(guiData, 'diffusionRate1', 0. ,10.).step(0.001);
@@ -98,6 +106,9 @@ function initBufferScene(){
       diff1: { type: "f", value: diffusionRate1},
       diff2: { type: "f", value: diffusionRate2},
       interpolate: { type: "f", value: interpolate },
+      hue: { type: "f", value: 0. },
+      saturate: { type: "f", value: 0. },
+      invert: { type: "f", value: 0.},
       sharp: { value: sharp },
       weight: { type: "f", value: weight },
       channel0: {value: texture},
@@ -150,22 +161,6 @@ function nStepSimulation() {
   }
 }
 
-function broadcastMessages(){
-  broadcast(JSON.stringify({
-		kind: 'interpolate',
-		value: guiData.interpolate,
-	}));
-  
-  broadcast(JSON.stringify({
-		kind: 'diffusionRate',
-		value: guiData.diffusionRate1,
-	}));
-  
-   broadcast(JSON.stringify({
-		kind: 'sharp',
-		value: guiData.sharp,
-	}));
-}
 
 var timeU,frame;
 
@@ -182,10 +177,17 @@ function render() {
   
   bufferMaterial.uniforms.diff1.value = guiData.diffusionRate1;
   bufferMaterial.uniforms.diff2.value = guiData.diffusionRate2;
+
+  bufferMaterial.uniforms.hue.value = guiData.hue
+
+  bufferMaterial.uniforms.saturate.value = guiData.saturate
+  bufferMaterial.uniforms.invert.value = guiData.invert;
+
   
   if (frame % (frequencyBroadcast *100) == 0){
     broadcastMessages();
   };
+
   frame ++;
   requestAnimationFrame(render);
   

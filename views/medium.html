@@ -90,6 +90,9 @@
       uniform vec2 resolution;
       uniform float diff1;
       uniform float diff2;
+      uniform float invert;
+      uniform float saturate;
+      uniform float hue;
 
       vec4 zero2one(vec4 v){
 
@@ -101,7 +104,39 @@
 
           return res;
       }
+      vec3 hueShift( vec3 color, float hueAdjust ){
 
+    const vec3  kRGBToYPrime = vec3 (0.299, 0.587, 0.114);
+    const vec3  kRGBToI      = vec3 (0.596, -0.275, -0.321);
+    const vec3  kRGBToQ      = vec3 (0.212, -0.523, 0.311);
+
+    const vec3  kYIQToR     = vec3 (1.0, 0.956, 0.621);
+    const vec3  kYIQToG     = vec3 (1.0, -0.272, -0.647);
+    const vec3  kYIQToB     = vec3 (1.0, -1.107, 1.704);
+
+    float   YPrime  = dot (color, kRGBToYPrime);
+    float   I       = dot (color, kRGBToI);
+    float   Q       = dot (color, kRGBToQ);
+    float   hue     = atan (Q, I);
+    float   chroma  = sqrt (I * I + Q * Q);
+
+    hue += hueAdjust;
+
+    Q = chroma * sin (hue);
+    I = chroma * cos (hue);
+
+    vec3    yIQ   = vec3 (YPrime, I, Q);
+
+    return vec3( dot (yIQ, kYIQToR), dot (yIQ, kYIQToG), dot (yIQ, kYIQToB) );
+
+      }
+      vec3 czm_saturation(vec3 rgb, float adjustment)
+{
+    // Algorithm from Chapter 16 of OpenGL Shading Language
+    const vec3 W = vec3(0.2125, 0.7154, 0.0721);
+    vec3 intensity = vec3(dot(rgb, W));
+    return mix(intensity, rgb, adjustment);
+}
 
       void main()
       {
@@ -110,7 +145,7 @@
           vec4 color_sharpen=vec4(0.);
           vec4 inText = texture2D(channel0,pixel);
           vec4 center = texture2D(channel1,pixel);
-
+          inText = mix(inText, 1.-inText, invert);
 
           float xPixel= 1./resolution.x * step;
           float yPixel= 1./resolution.x * step;
@@ -140,15 +175,18 @@
 
           vec4 newColor = vec4(factor, 1.);
 
-          color_sharpen= newColor/9.;
+          newColor= newColor/9.;
 
-          float a = color_sharpen.r;
 
-          color_sharpen=vec4(inText * 4.* (a * a - color_sharpen.b)+ sharp*color_sharpen);
+          newColor=vec4(inText * sharp* (newColor.r * newColor.r * newColor.r - newColor.b));
 
-          color_sharpen=fract(color_sharpen);
+      newColor=smoothstep(0.,1.,fract(newColor));
+     
 
-          gl_FragColor = mix(inText,color_sharpen, interpolate);
+      newColor.rgb=hueShift( newColor.rgb, hue);
+      newColor.rgb=czm_saturation( newColor.rgb, saturate);
+
+          gl_FragColor = mix(max(inText,center), newColor, interpolate);
         }
     </script>
     <script src="index-controls.js"></script>
