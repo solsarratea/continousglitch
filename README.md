@@ -1,6 +1,6 @@
 # continous glitch
 
-P2P medium to gltich images collaboratively
+Medium to glitch images collaboratively
 
 ![](public/assets/display.png)
 
