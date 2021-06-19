@@ -50,7 +50,6 @@ function connect() {
 
 function onmsg(e) {
 	let msg = JSON.parse(e.data);
-
     switch (msg.kind){
     case 'interpolate':
         window.guiData.interpolate = msg.value;
@@ -63,7 +62,6 @@ function onmsg(e) {
         break;
     case 'invert':
         window.guiData.invert = msg.value;
-        console.log(msg.value);
         break;
     case 'sharp':
         window.guiData.sharp = msg.value;
