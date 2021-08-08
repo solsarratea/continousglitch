@@ -164,7 +164,6 @@ function nStepSimulation() {
 
 var timeU,frame;
 
-frame = 0;
 function render() {
   timeU = performance.now() * 0.05;
   bufferMaterial.uniforms.time.value = timeU;
@@ -183,12 +182,10 @@ function render() {
   bufferMaterial.uniforms.saturate.value = guiData.saturate
   bufferMaterial.uniforms.invert.value = guiData.invert;
 
-  
-  if (frame % (frequencyBroadcast *100) == 0){
-    broadcastMessages();
+  if (renderer.info.render.frame % (frequencyBroadcast *100) == 0){
+        broadcastMessages(window.guiData.send);
   };
 
-  frame ++;
   requestAnimationFrame(render);
   
   for (let index = 0; index < iterations; index++) {
