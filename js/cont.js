@@ -25,7 +25,8 @@ window.gui;
 function  addGuiControls(){
     gui = new dat.GUI();
     gui.remember(this);
-  
+
+
     guiData = {
       "step" : 1.,
       "iterations": 1,
@@ -38,20 +39,81 @@ function  addGuiControls(){
       "invert":0,
       "hue":0.,
       "saturate":0.,
-  };
+      "sender": false,
+      "receiver": false,
+      "send":{
+            "step" : false,
+            "iterations": false,
+            "interpolate": false,
+            "sharp": false,
+            "weight" : false,
+            "diffusionRate1": false,
+            "diffusionRate2": false,
+            "frequencyBroadcast": false,
+            "invert":false,
+            "hue":false,
+            "saturate":false,
+        },
+        "receive":{
+            "step" : false,
+            "iterations": false,
+            "interpolate": false,
+            "sharp": false,
+            "weight" : false,
+            "diffusionRate1": false,
+            "diffusionRate2": false,
+            "frequencyBroadcast": false,
+            "invert":false,
+            "hue":false,
+            "saturate":false,
+        }
+    };
+    gui.add(guiData, 'receiver');
+    const receive = gui.addFolder('WHAT to receive');
+
+    gui.add(guiData, 'sender');
     gui.add(guiData, 'frequencyBroadcast', 1, 100 ).step(1);
-    gui.add(guiData, 'step', 0., 5.).step(.1);
-    gui.add(guiData, 'iterations', 1, 10 ).step(1);
+    const send = gui.addFolder('WHAT to broadcast');
+    const control = gui.addFolder('Specify values');
 
-    gui.add(guiData, 'invert', 0, 1.).step(0.001);
-    gui.add(guiData, 'saturate', 0, 1.).step(0.001);
-    gui.add(guiData, 'hue', -5., 5.).step(0.001);
 
-    gui.add(guiData, 'interpolate', 0, 1.).step(0.001);
-    gui.add(guiData, 'sharp', 0, 1.).step(0.001);
-    gui.add(guiData, 'weight', -20, 20.); 
-    gui.add(guiData, 'diffusionRate1', 0. ,10.).step(0.001);
-    gui.add(guiData, 'diffusionRate2', 0. ,10.).step(0.001);
+    send.add(guiData.send, 'step')
+    send.add(guiData.send, 'iterations')
+    send.add(guiData.send, 'interpolate')
+    send.add(guiData.send, 'sharp')
+    send.add(guiData.send, 'weight')
+    send.add(guiData.send, 'diffusionRate1')
+    send.add(guiData.send, 'diffusionRate2')
+    send.add(guiData.send, 'frequencyBroadcast')
+    send.add(guiData.send, 'invert')
+    send.add(guiData.send, 'hue')
+    send.add(guiData.send, 'saturate')
+
+    receive.add(guiData.receive, 'step')
+    receive.add(guiData.receive, 'iterations')
+    receive.add(guiData.receive, 'interpolate')
+    receive.add(guiData.receive, 'sharp')
+    receive.add(guiData.receive, 'weight')
+    receive.add(guiData.receive, 'diffusionRate1')
+    receive.add(guiData.receive, 'diffusionRate2')
+    receive.add(guiData.receive, 'frequencyBroadcast')
+    receive.add(guiData.receive, 'invert')
+    receive.add(guiData.receive, 'hue')
+    receive.add(guiData.receive, 'saturate')
+
+
+    control.add(guiData, 'step', 0., 5.).step(.1);
+    control.add(guiData, 'iterations', 1, 10 ).step(1);
+
+    control.add(guiData, 'invert', 0, 1.).step(0.001);
+    control.add(guiData, 'saturate', 0, 1.).step(0.001);
+    control.add(guiData, 'hue', -5., 5.).step(0.001);
+
+    control.add(guiData, 'interpolate', 0, 1.).step(0.001);
+    control.add(guiData, 'sharp', 0, 1.).step(0.001);
+    control.add(guiData, 'weight', -20, 20.);
+    control.add(guiData, 'diffusionRate1', 0. ,10.).step(0.001);
+    control.add(guiData, 'diffusionRate2', 0. ,10.).step(0.001);
 };
 
 var camera, renderer,scene, domEevents,controls,dragControls;
