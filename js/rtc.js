@@ -121,9 +121,10 @@ function receiveMessage(e){
         const receiveParams = window.guiData.receive;
              if (receiveParams.hasOwnProperty(kind)) {
                  const state = receiveParams[kind];
-                 console.log("Receiving: ", kind, " with value ", value)
-                 window.guiData[kind] = value;
-
+                 if (state){
+                     console.log("Receiving: ", kind, " with value ", value)
+                     window.guiData[kind] = value;
+                 }
 
              }
     }
