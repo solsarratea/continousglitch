@@ -120,51 +120,27 @@ function createPeerConnection(socket,pcs,data,id){
 	return pc;
 }
 
-function broadcastSingleMessage(kind, value){
-    //TODO: implement actor to be sender and to chose which parameters to broadcast
-    if(window.guiData.sender){
-       // console.log("Broadcasting: ", kind)
+function broadcastSingleMessage(kind, state, value){
+    if(state){
+        console.log("Broadcasting: ", kind, " with value ", value)
         broadcast(JSON.stringify({
 		    kind: kind,
 		    value: value
 	    }));
     }
 }
-function broadcastMessages(){
-//FIXME: hardcoded parameters to broadcast
-    broadcast(JSON.stringify({
-		kind: 'interpolate',
-		value: window.guiData.interpolate,
-	}));
+function broadcastMessages(sendParams){
+    if(window.guiData.sender){
+        for (var param in sendParams) {
+            if (sendParams.hasOwnProperty(param)) {
+                const kind = param;
+                const state = sendParams[param];
+                const value = window.guiData[param];
+                broadcastSingleMessage(kind, state, value);
 
-    broadcast(JSON.stringify({
-		kind: 'diffusionRate1',
-		value: window.guiData.diffusionRate1,
-	}));
-
-    // broadcast(JSON.stringify({
-	// 	kind: 'hue',
-	// 	value: window.guiData.hue,
-	// }));
-
-    // broadcast(JSON.stringify({
-	// 	kind: 'saturate',
-	// 	value: window.guiData.saturate,
-	// }));
-
-    broadcast(JSON.stringify({
-		kind: 'sharp',
-		value: window.guiData.sharp,
-	}));
-
-    broadcast(JSON.stringify({
-		kind: 'invert',
-		value: window.guiData.invert,
-	}));
-    // broadcast(JSON.stringify({
-	// 	kind: 'weight',
-	// 	value: window.guiData.weight,
-	// }));
+            }
+        }
+    }
 }
 
 connect();
