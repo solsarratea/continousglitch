@@ -7,7 +7,8 @@
   "description": "A simple Node app built on Express, instantly up and running.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+      "dev": "NODE_ENV=dev PORT=3000 nodemon server.js",
+      "start":"NODE_ENV=prod node server.js"
   },
   "dependencies": {
     "express": "^4.17.1",
@@ -16,6 +17,11 @@
     "socket.io": "^2.3.0",
     "three": "^0.115.0"
   },
+    "devDependencies": {
+        "debug": "^4.3.1",
+        "eslint": "^7.27.0",
+        "nodemon": "^2.0.7"
+    },
   "engines": {
     "node": "12.x"
   },
