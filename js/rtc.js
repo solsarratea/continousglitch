@@ -14,7 +14,7 @@ function connect() {
 	window.pcs = pcs;
 
 	socket.on('hello', async data => {
-		console.log("got hello", data)
+		console.log("Got hello: from "+ data.from)
 		let pc = createPeerConnection(socket,pcs,data, id);
 		await pc.setLocalDescription(await pc.createOffer());
 		socket.emit('offer', {from: id, to: data.from, offer: pc.localDescription })
@@ -23,7 +23,7 @@ function connect() {
 	socket.on('offer', async data => {
 		if (data.to == id){
 			let pc = createPeerConnection(socket,pcs,data,id);
-			console.log("got offer",pc)
+			console.log("Got offer: from " + data.from ,pc)
 			await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
 			await pc.setLocalDescription(await pc.createAnswer());
 			socket.emit('answer', {from: id, to: data.from, answer: pc.localDescription});
@@ -33,7 +33,7 @@ function connect() {
 	socket.on('answer', async data => {
 		if (data.to == id){
 			let pc = pcs.get(data.from);
-			console.log("got answer")
+			console.log("Got answer: from "+ data.from)
 			await pc.setRemoteDescription(new RTCSessionDescription(data.answer));
 	}})
 
@@ -44,45 +44,12 @@ function connect() {
 			pc.addIceCandidate(new RTCIceCandidate(data.candidate));
 		}
 	})
-
+    console.log("Emitting 'hello' message with id: ", id)
 	socket.emit('hello', {from: id})
 }
 
-function onmsg(e) {
-	let msg = JSON.parse(e.data);
-    switch (msg.kind){
-    case 'interpolate':
-        window.guiData.interpolate = msg.value;
-        break;
-    case 'diffusionRate1':
-        window.guiData.diffusionRate1 = msg.value;
-        break;
-    case 'diffusionRate2':
-        window.guiData.diffusionRate2 = msg.value;
-        break;
-    case 'invert':
-        window.guiData.invert = msg.value;
-        break;
-    case 'sharp':
-        window.guiData.sharp = msg.value;
-        break;
-    case 'hue':
-        window.guiData.hue = msg.value;
-        break;
-    case 'saturate':
-        window.guiData.saturate = msg.value;
-        break;
-    case 'weight':
-        window.guiData.weight = msg.value;
-        break;
-
-      default:
-        console.log(`Invalid msg ${msg.kind}`)
-    }
-}
-
 function broadcast(msg){
- // console.log("sending msg", msg)
+   // console.log("Sending msg", msg)
 	for (let index = 0; index < datachannels.length; index++) {
 		datachannels[index].send(msg);	
 	}
@@ -99,12 +66,15 @@ function createPeerConnection(socket,pcs,data,id){
   
 	let datachannel = pc.createDataChannel("data", {negotiated: true, id: 0});
 	datachannel.onopen = e => {
-		console.log("datachannel open!");
+		console.log("Datachannel open!");
 		datachannels.push(datachannel);
 	};
   
 	datachannel.onmessage = e => {
-		onmsg(e)
+        if (window.guiData.receiver){
+            console.log("Receiving data.")
+		    receiveMessage(e)
+        }
 	}
 
 
@@ -140,6 +110,22 @@ function broadcastMessages(sendParams){
 
             }
         }
+    }
+}
+
+function receiveMessage(e){
+    if(window.guiData.receiver){
+        const msg = JSON.parse(e.data);
+        const kind = msg.kind;
+        const value = msg.value;
+        const receiveParams = window.guiData.receive;
+             if (receiveParams.hasOwnProperty(kind)) {
+                 const state = receiveParams[kind];
+                 console.log("Receiving: ", kind, " with value ", value)
+                 window.guiData[kind] = value;
+
+
+             }
     }
 }
 
