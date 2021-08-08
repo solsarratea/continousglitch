@@ -55,10 +55,10 @@
       <dd>
         - Choosing <b>when</b> to broadcast your messages in terms of frames. Using frecuencyBroadcast.
       </dd>
-      <dd class="wip">
+      <dd >
         - Choosing <b>what</b> values of the controls <b>you are sending </b> : default sharing values are diffusionRate1, sharp, interpolate. 
       </dd>
-      <dd class="wip">
+      <dd>
         - Choosing <b>what</b> values of the controls <b>you are receiving</b> : filters are not implemented yet.
       </dd>
     </dl>
@@ -92,9 +92,7 @@
                 .then(data => {
                   img.src = data.path;
                   img.crossOrigin = "anonymous";
-                  console.log("saving !!! path", data.path);
-
-                  window.location.href = `medium?${data.path}`;
+                   window.location.href = `medium?${data.path}`;
                   
                 })
                 .catch(error => {
@@ -118,7 +116,7 @@
     </div>
     <footer>
       Workshop designed for
-      <a href="https://hacklab01.org/hackn3t">hacn3t</a> </br>
+      <a href="https://hacklab01.org/hackn3t">hackn3t - hacklab web residencies </a> </br>
       facilitatd by <a href="https://solquemal.com/">sol sarratea</a>
     </footer>
   </body>
