@@ -56,7 +56,19 @@ function broadcast(msg){
 }
 
 function createPeerConnection(socket,pcs,data,id){
-	let pc = new RTCPeerConnection({"iceServers":[{"urls":"stun:stun.l.google.com:19302"}]});
+	let pc = new RTCPeerConnection({"iceServers":[
+		{"urls":"stun:stun.l.google.com:19302"},
+		{
+			'urls': 'turn:turn.b621.net:3478?transport=udp',
+//       			'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+      			'username': 'twitter-benjojo12:ifyouseethis'
+    		},
+    		{
+      			'urls': 'turn:turn.b621.net:3478?transport=tcp',
+//       			'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+      			'username': 'twitter-benjojo12:ifyouseethis'
+    		}]
+	});
 
 	pc.onicecandidate = e => {
 		if (e.candidate) {
