@@ -60,13 +60,13 @@ function createPeerConnection(socket,pcs,data,id){
 		{"urls":"stun:stun.l.google.com:19302"},
 		{
 			'urls': 'turn:turn.b621.net:3478?transport=udp',
-//       			'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-      			'username': 'twitter-benjojo12:ifyouseethis'
+			'credential': 'ifyouseethis',
+      			'username': 'twitter-benjojo12'
     		},
     		{
       			'urls': 'turn:turn.b621.net:3478?transport=tcp',
-//       			'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-      			'username': 'twitter-benjojo12:ifyouseethis'
+			'credential': 'ifyouseethis',
+      			'username': 'twitter-benjojo12'
     		}]
 	});
 
