@@ -60,12 +60,12 @@ function createPeerConnection(socket,pcs,data,id){
 		{"urls":"stun:stun.l.google.com:19302"},
 		{
 			'urls': 'turn:turn.b621.net:3478?transport=udp',
-			'credential': 'ifyouseethis',
+			'credential': 'donoevil',
       			'username': 'twitter-benjojo12'
     		},
     		{
       			'urls': 'turn:turn.b621.net:3478?transport=tcp',
-			'credential': 'ifyouseethis',
+			'credential': 'donoevil',
       			'username': 'twitter-benjojo12'
     		}]
 	});
