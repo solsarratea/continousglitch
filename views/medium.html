@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
+
+    <title>continousGlich</title>
+    <meta property="og:title" content="bu3nPattern">
+
+    <!--Preview Images-->
+
+    <meta property="og:image" content="https://continous-glitch.herokuapp.com/assets/display.png">
+    <link rel="image_src" href="/assets/display.png">
+
+    <!--Description-->
+
+    <meta name="description" content="Understanding RTP protocol by glitching an image collaboratively">
+    <meta property="og:description" content="Understanding RTP protocol by glitching an image collaboratively">
+
+    <!--Author-->
+
+    <meta name="author" content="solquemal">
+
+    <!--Twitter config-->
+    <meta name="twitter:title"  content="continous gltich">
+    <meta name="twitter:description"content="Understanding RTP protocol by glitching an image collaboratively">
+    <meta name="twitter:image"  content="https://continous-glitch.herokuapp.com/assets/display.png">
+    <meta name="twitter:card" content="summary_large_image">
+
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <title>Continous Glitch</title>
@@ -9,7 +34,6 @@
       http-equiv="Content-Security-Policy"
       content="upgrade-insecure-requests"
     />
-    <title>Continous Glitch</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
     <script src="https://threejs.org/examples/js/controls/DragControls.js"></script>
@@ -31,10 +55,16 @@
     <link href="/styles.css" rel="stylesheet" />
   </head>
   <body>
-  
-<!--       <a id="btn" class="info">
-        <span class="fab fas fa-info-circle info"></span>
-      </a>
+
+       <a id="screenshot" class="info">
+     <span class="fab fas fa-camera-retro fa-2x"></span>
+     <span class="text">Take screenshot</span>
+       </a>
+        <a href="https://github.com/solsarratea/continousglitch" class="info"
+    title="View source on Github">
+    <span class="fab fa-github"></span>
+    <span class="text">View source</span>
+  </a>
       <div id="showInfo" class="modal">
         <div class="modal-header">
           <p>CONTINOUS GLITCH</p>
@@ -45,15 +75,7 @@
             Living medium to rotten digital data through diffusion process.
           </h4>
         </div>
-      <!-- </div> -\-> -->
-      <!-- <a -->
-      <!--   href="https://glitch.com/edit/#!/continous-glitch?path=README.md%3A1%3A0" -->
-      <!--   class="info" -->
-      <!--   title="View source" -->
-      <!-- > -->
-      <!--   <img style="width:2.5em; margin-top: em;" src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" alt="Glitch"> -->
-      <!--   <span class="text">View source</span> -->
-      <!-- </a> -->
+
   
     <script id="vertexShader" type="x-shader/x-vertex">
       varying vec2 texCoordVarying;
@@ -106,37 +128,40 @@
       }
       vec3 hueShift( vec3 color, float hueAdjust ){
 
-    const vec3  kRGBToYPrime = vec3 (0.299, 0.587, 0.114);
-    const vec3  kRGBToI      = vec3 (0.596, -0.275, -0.321);
-    const vec3  kRGBToQ      = vec3 (0.212, -0.523, 0.311);
+          const vec3  kRGBToYPrime = vec3 (0.299, 0.587, 0.114);
+          const vec3  kRGBToI      = vec3 (0.596, -0.275, -0.321);
+          const vec3  kRGBToQ      = vec3 (0.212, -0.523, 0.311);
 
-    const vec3  kYIQToR     = vec3 (1.0, 0.956, 0.621);
-    const vec3  kYIQToG     = vec3 (1.0, -0.272, -0.647);
-    const vec3  kYIQToB     = vec3 (1.0, -1.107, 1.704);
+          const vec3  kYIQToR     = vec3 (1.0, 0.956, 0.621);
+          const vec3  kYIQToG     = vec3 (1.0, -0.272, -0.647);
+          const vec3  kYIQToB     = vec3 (1.0, -1.107, 1.704);
 
-    float   YPrime  = dot (color, kRGBToYPrime);
-    float   I       = dot (color, kRGBToI);
-    float   Q       = dot (color, kRGBToQ);
-    float   hue     = atan (Q, I);
-    float   chroma  = sqrt (I * I + Q * Q);
+          float   YPrime  = dot (color, kRGBToYPrime);
+          float   I       = dot (color, kRGBToI);
+          float   Q       = dot (color, kRGBToQ);
+          float   hue     = atan (Q, I);
+          float   chroma  = sqrt (I * I + Q * Q);
 
-    hue += hueAdjust;
+          hue += hueAdjust;
 
-    Q = chroma * sin (hue);
-    I = chroma * cos (hue);
+          Q = chroma * sin (hue);
+          I = chroma * cos (hue);
 
-    vec3    yIQ   = vec3 (YPrime, I, Q);
+          vec3    yIQ   = vec3 (YPrime, I, Q);
 
-    return vec3( dot (yIQ, kYIQToR), dot (yIQ, kYIQToG), dot (yIQ, kYIQToB) );
+          return vec3( dot (yIQ, kYIQToR), dot (yIQ, kYIQToG), dot (yIQ, kYIQToB) );
 
       }
-      vec3 czm_saturation(vec3 rgb, float adjustment)
-{
-    // Algorithm from Chapter 16 of OpenGL Shading Language
-    const vec3 W = vec3(0.2125, 0.7154, 0.0721);
-    vec3 intensity = vec3(dot(rgb, W));
-    return mix(intensity, rgb, adjustment);
-}
+      vec3 czm_saturation(vec3 rgb, float adjustment) {
+          // Algorithm from Chapter 16 of OpenGL Shading Language
+          const vec3 W = vec3(0.2125, 0.7154, 0.0721);
+          vec3 intensity = vec3(dot(rgb, W));
+          return mix(intensity, rgb, adjustment);
+      }
+
+      float luma(vec4 color) {
+          return dot(color.rgb, vec3(0.299, 0.587, 0.114));
+      }
 
       void main()
       {
@@ -146,9 +171,9 @@
           vec4 inText = texture2D(channel0,pixel);
           vec4 center = texture2D(channel1,pixel);
           inText = mix(inText, 1.-inText, invert);
-
+          
           float xPixel= 1./resolution.x * step;
-          float yPixel= 1./resolution.x * step;
+          float yPixel= 1./resolution.y * step;
 
 
           vec4 E = texture2D(channel1, vec2(pixel.x+xPixel,pixel.y));
@@ -178,18 +203,22 @@
           newColor= newColor/9.;
 
 
-          newColor=vec4(inText * sharp* (newColor.r * newColor.r * newColor.r - newColor.b));
+          newColor =vec4(inText * sharp* (newColor.r * newColor.r * newColor.r - newColor.b));
+          newColor *= mix(1.,luma(newColor),sharp);
+          newColor=smoothstep(0.1,.7,fract(newColor));
+          newColor = mix(max(inText,center), newColor, interpolate);
+         
+          newColor.rgb=czm_saturation( newColor.rgb, saturate);
+          newColor.rgb=hueShift( newColor.rgb, hue);
+         
 
-      newColor=smoothstep(0.,1.,fract(newColor));
-     
-
-      newColor.rgb=hueShift( newColor.rgb, hue);
-      newColor.rgb=czm_saturation( newColor.rgb, saturate);
-
-          gl_FragColor = mix(max(inText,center), newColor, interpolate);
+          gl_FragColor = newColor;
         }
     </script>
     <script src="index-controls.js"></script>
     <script src="cont.js"></script>
+    <script src="helper.js"></script>
+    <script src="FileSaver.js"></script>
+
   </body>
 </html>

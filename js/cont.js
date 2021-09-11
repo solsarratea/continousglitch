@@ -102,15 +102,15 @@ function  addGuiControls(){
     receive.add(guiData.receive, 'saturate')
 
 
-    control.add(guiData, 'step', 0., 5.).step(.1);
-    control.add(guiData, 'iterations', 1, 10 ).step(1);
+    control.add(guiData, 'step', 0., 30.).step(.1);
+    control.add(guiData, 'iterations', 1, 10 ).step(.05);
 
     control.add(guiData, 'invert', 0, 1.).step(0.001);
-    control.add(guiData, 'saturate', 0, 1.).step(0.001);
-    control.add(guiData, 'hue', -5., 5.).step(0.001);
+    control.add(guiData, 'saturate', 0, 2.5).step(0.001);
+    control.add(guiData, 'hue', -8., 8.).step(0.001);
 
     control.add(guiData, 'interpolate', 0, 1.).step(0.001);
-    control.add(guiData, 'sharp', 0, 1.).step(0.001);
+    control.add(guiData, 'sharp', -2., 2.).step(0.001);
     control.add(guiData, 'weight', -20, 20.);
     control.add(guiData, 'diffusionRate1', 0. ,10.).step(0.001);
     control.add(guiData, 'diffusionRate2', 0. ,10.).step(0.001);
@@ -119,10 +119,13 @@ function  addGuiControls(){
 var camera, renderer,scene, domEevents,controls,dragControls;
 function setupMainScene(){
   scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
-  camera.position.set(2, 3, 5);
-  renderer = new THREE.WebGLRenderer({});
-
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth/ window.innerHeight, 0.01, 1000);
+    camera.position.y = 0;
+    camera.position.z = 10;
+    renderer = new THREE.WebGLRenderer({
+        preserveDrawingBuffer: true
+    });
+    renderer.domElement.id = 'glCanvas';
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
   controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -133,6 +136,7 @@ function setupMainScene(){
 
   controls.minDistance = 0.025;
   controls.maxDistance = 44;
+
 }
 
 var bufferScene ,ping ,pong, renderTargetParams;
